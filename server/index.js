@@ -2,11 +2,19 @@ import express from 'express';
 import config from './config/constants';
 import './config/database';
 import middlewaresConfig from './config/middlewares';
+import apiRoutes from './my_modules/index';
 
-console.log(typeof middlewaresConfig);
+// console.log(typeof middlewaresConfig);
+
 const app = express();
 
+app.get('/', (req, res) => {
+    res.send('Welcome');
+});
+
 middlewaresConfig(app);
+
+apiRoutes(app);
 
 app.listen(config.PORT, err => {
     if(err) {
