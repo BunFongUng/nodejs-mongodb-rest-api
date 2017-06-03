@@ -29,3 +29,7 @@ export async function signUp(req, res) {
         return res.status(500).json(err);
     }
 };
+
+export function login(req, res, next) {
+    res.status(200).json(req.user);
+}

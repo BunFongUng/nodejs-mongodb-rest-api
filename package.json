@@ -4,20 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:build": "webpack -w",
+    "clean": "rimraf dist",
+    "dev:build": "npm run clean && webpack -w",
     "dev": "cross-env NODE_ENV=development nodemon dist/index.bundle.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "cross-env": "^5.0.0",
     "express": "^4.15.3",
+    "express-validation": "^1.0.2",
     "helmet": "^3.6.0",
+    "joi": "^10.5.0",
     "lodash": "^4.17.4",
     "mongoose": "^4.10.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "validator": "^7.0.0"
   },
   "devDependencies": {
@@ -27,6 +33,7 @@
     "babel-preset-env": "^1.5.0",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1",
     "webpack": "^2.5.1",
     "webpack-node-externals": "^1.6.0"
   }
