@@ -2,6 +2,8 @@ import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import { passwordReg } from './user.validation';
+import jwt from 'jsonwebtoken';
+import constants from '../../config/constants';
 
 const UserSchema = new Schema({
     email: {
@@ -43,6 +45,8 @@ const UserSchema = new Schema({
             message: '{VALUE} is not valid password'
         }
     }
+}, {
+    timestamps: true
 });
 
 UserSchema.pre('save', function(next) {
@@ -58,6 +62,22 @@ UserSchema.methods = {
     },
     authenticateUser(password) {
         return compareSync(password, this.password);
+    },
+    createToken() {
+        return jwt.sign(
+            {
+                _id: this._id
+            },
+            constants.JWT_SECRET
+        ); 
+    },
+    toJSON() {
+      return {
+          _id: this._id,
+          user_name: this.user_name,
+          email: this.email,
+          token: this.createToken()
+      };  
     }
 }
 

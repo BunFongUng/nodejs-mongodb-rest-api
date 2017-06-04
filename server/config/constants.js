@@ -1,5 +1,6 @@
 const devConfig = {
-    MONGO_URL: 'mongodb://localhost:27017/nodejsrestapi-dev'
+    MONGO_URL: 'mongodb://localhost:27017/nodejsrestapi-dev',
+    JWT_SECRET: 'myjwtsecret'
 };
 
 const testConfig = {
