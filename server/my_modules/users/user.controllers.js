@@ -11,19 +11,10 @@ export async function signUp(req, res) {
             'password'
         ]);
 
-        console.log(`
-            signup object
-            ::::::::::::::::::::::
-        `);
-
-        console.log(JSON.stringify(body, undefined, 2));
-
-        console.log("::::::::::::::::::::::");
-
         const user = await User.create(body);
         return res.status(201).json({
             status: 'success',
-            data: user
+            data: user.toAuthJSON()
         });
     } catch(err) {
         return res.status(500).json(err);
@@ -31,6 +22,6 @@ export async function signUp(req, res) {
 };
 
 export function login(req, res, next) {
-    res.status(200).json(req.user);
+    res.status(200).json(req.user.toAuthJSON());
     return next();
 }

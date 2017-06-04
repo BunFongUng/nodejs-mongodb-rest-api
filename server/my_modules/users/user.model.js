@@ -50,15 +50,15 @@ const UserSchema = new Schema({
         }
     }
 }, {
-    timestamps: true
-});
+        timestamps: true
+    });
 
 UserSchema.plugin(uniqueValidator, {
     message: '{VALUE} alreay token.'
 });
 
-UserSchema.pre('save', function(next) {
-    if(this.isModified('password')) {
+UserSchema.pre('save', function (next) {
+    if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
     }
     return next();
@@ -74,18 +74,25 @@ UserSchema.methods = {
     createToken() {
         return jwt.sign(
             {
-               _id: this._id,
+                _id: this._id,
             },
             constants.JWT_SECRET,
-        ); 
+        );
+    },
+    toAuthJSON() {
+        return {
+            _id: this._id,
+            user_name: this.user_name,
+            email: this.email,
+            token: `JWT ${this.createToken()}`
+        };
     },
     toJSON() {
-      return {
-          _id: this._id,
-          user_name: this.user_name,
-          email: this.email,
-          token: `JWT ${this.createToken()}`
-      };  
+        return {
+            _id: this._id,
+            user_name: this.user_name,
+            email: this.email
+        };
     }
 }
 

@@ -45,6 +45,17 @@ PostSchema.pre('validate', function(next) {
 PostSchema.methods = {
     _slugtify() {
         this.slug = slug(this.title);
+    },
+    toJSON() {
+        return {
+            _id: this._id,
+            createdAt: this.createdAt,
+            slug: this.slug,
+            title: this.title,
+            text: this.text,
+            user: this.user,
+            favoriteCount: this.favoriteCount
+        }
     }
 };
 
