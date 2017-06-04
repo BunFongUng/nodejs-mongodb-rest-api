@@ -4,8 +4,6 @@ import './config/database';
 import middlewaresConfig from './config/middlewares';
 import apiRoutes from './my_modules/index';
 
-// console.log(typeof middlewaresConfig);
-
 const app = express();
 
 app.get('/', (req, res) => {

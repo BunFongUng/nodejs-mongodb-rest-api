@@ -7,7 +7,7 @@ import { authLocal } from '../../services/auth.service';
 
 const routes = new Router();
 
-routes.post('/signup', validate(userValidation.signup), userController.signUp);
+routes.post('/signup', validate(userValidation.signUp), userController.signUp);
 routes.post('/login', authLocal, userController.login);
 
 export default routes;

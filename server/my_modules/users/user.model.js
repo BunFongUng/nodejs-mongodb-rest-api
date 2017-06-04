@@ -1,6 +1,10 @@
+// external imports
 import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
+import uniqueValidator from 'mongoose-unique-validator';
+
+//internal imports
 import { passwordReg } from './user.validation';
 import jwt from 'jsonwebtoken';
 import constants from '../../config/constants';
@@ -49,6 +53,10 @@ const UserSchema = new Schema({
     timestamps: true
 });
 
+UserSchema.plugin(uniqueValidator, {
+    message: '{VALUE} alreay token.'
+});
+
 UserSchema.pre('save', function(next) {
     if(this.isModified('password')) {
         this.password = this._hashPassword(this.password);
@@ -66,9 +74,9 @@ UserSchema.methods = {
     createToken() {
         return jwt.sign(
             {
-                _id: this._id
+               _id: this._id,
             },
-            constants.JWT_SECRET
+            constants.JWT_SECRET,
         ); 
     },
     toJSON() {
@@ -76,7 +84,7 @@ UserSchema.methods = {
           _id: this._id,
           user_name: this.user_name,
           email: this.email,
-          token: this.createToken()
+          token: `JWT ${this.createToken()}`
       };  
     }
 }
