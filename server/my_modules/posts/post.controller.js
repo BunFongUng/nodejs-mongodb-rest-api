@@ -37,3 +37,18 @@ export async function getPostById(req, res) {
         return res.status(400).json(e);
     }
 }
+
+export async function getPostList(req, res) {
+    console.log('query skip: ', req.query.skip);
+    console.log('query limit :', req.query.limit);
+
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
+    
+    try {
+        const posts = await Post.list({skip, limit});
+        return res.status(200).json(posts);
+    } catch (e) {
+        return res.status(400).json(e);
+    }
+}
