@@ -1,13 +1,14 @@
 import { ObjectID } from 'mongodb';
 
 import Post from './post.model';
+import User from '../users/user.model';
 
 export async function createPost(req, res) {
     try {
         // Visitability way
         // const post = await Post.create({...req.body, user: req.uer._id });
 
-        // abstract way 
+        // abstract way
         // console.log(req.user);
         const post = await Post.createPost(req.body, req.user._id);
         return res.status(200).json(post);
@@ -23,14 +24,14 @@ export async function getPostById(req, res) {
                 message: 'Invalid post id!'
             });
         }
-        
+
         const post = await Post.findById(req.params.id).populate('user');
-        
+
         if(!post) {
             return res.status(404).json({
                 message: 'Post not found!'
             });
-        } 
+        }
 
         return res.status(200).json(post);
     } catch (e) {
@@ -44,7 +45,7 @@ export async function getPostList(req, res) {
 
     const skip = parseInt(req.query.skip) || 0;
     const limit = parseInt(req.query.limit) || 10;
-    
+
     try {
         const posts = await Post.list({skip, limit});
         return res.status(200).json(posts);
@@ -87,4 +88,14 @@ export async function deletePost(req, res) {
     } catch (e) {
         return res.status(400).json(e);
     }
+}
+
+export async function favoritePost(req, res) {
+  try {
+    const user = await User.findById(req.user._id);
+    await user._favorites.posts(req.params.id);
+    return res.sendStatus(200);
+  } catch (e) {
+    return res.status(400).json(e);
+  }
 }

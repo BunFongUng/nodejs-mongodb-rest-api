@@ -3,6 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import uniqueValidator from 'mongoose-unique-validator';
+import Post from '../posts/post.model';
 
 //internal imports
 import { passwordReg } from './user.validation';
@@ -48,7 +49,13 @@ const UserSchema = new Schema({
             },
             message: '{VALUE} is not valid password'
         }
-    }
+    },
+    favorites: {
+      posts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Post'
+      }]
+    },
 }, {
         timestamps: true
     });
@@ -93,6 +100,18 @@ UserSchema.methods = {
             user_name: this.user_name,
             email: this.email
         };
+    },
+    _favorites: {
+      async posts(postId) {
+        if(this.favorites.posts.indexOf(postId) > -1) {
+          this.favorites.posts.remove(postId)
+          await Post.decFavoriteCount(postId);
+        } else {
+          this.favorites.posts.push(postId)
+          await Post.incFavoriteCount(postId);
+        }
+        return this.save();
+      }
     }
 }
 
