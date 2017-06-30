@@ -111,8 +111,14 @@ UserSchema.methods = {
           await Post.incFavoriteCount(postId);
         }
         return this.save();
+      },
+      isPostIsFavorite(postId) {
+        if(this.favorites.posts.indexOf(postId) > -1) {
+          return true;
+        }
+        return false;
       }
-    }
+    },
 }
 
 export default mongoose.model('User', UserSchema);

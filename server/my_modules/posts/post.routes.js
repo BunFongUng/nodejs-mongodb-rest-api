@@ -9,11 +9,11 @@ import postValidation from './post.validation';
 
 const routes = new Router();
 
-routes.get('/', postController.getPostList);
+routes.get('/', authJwt, postController.getPostList);
 
 routes.post('/', authJwt, validate(postValidation.createPost) , postController.createPost);
 
-routes.get('/:id', postController.getPostById);
+routes.get('/:id', authJwt, postController.getPostById);
 
 routes.patch('/:id', authJwt, validate(postValidation.updatePost), postController.updatePost);
 
